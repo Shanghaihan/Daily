@@ -1,8 +1,23 @@
 import React from 'react' 
 import styles from './index.module.scss'
 import cn from 'classnames'
+import { context } from '../../App';
+import ReactDOM from 'react-dom';
+import { url } from 'inspector';
+import { couldStartTrivia } from 'typescript';
 
                             
+export const Menu:React.FC = ()=>{
+    return(
+        <div id = "menu" className = {styles.menu} >
+            <Header/>
+        </div>
+    )
+}
+
+
+
+
 
 const getDayData = ():any=>{
     let data:string[][] = [];
@@ -22,23 +37,16 @@ const getDayData = ():any=>{
     }
     return [data,currentDay];
 }
-
-export const Menu:React.FC = ()=>{
-    return(
-        <div className = {styles.menu}>
-            <Header/>
-        </div>
-    )
-}
 const Header:React.FC = ()=>{
+    //@ts-ignore
+    const {day,setDay} = React.useContext(context);
     const ref = React.useRef<HTMLUListElement>(null);
     const [dayData,setDayData] = React.useState<string[][]>(getDayData()[0]);
-    const [currentDay,setCurrentDay] = React.useState<string[]>(getDayData()[1]);
     const handleDate = (e:React.MouseEvent<HTMLLIElement, MouseEvent>)=>{
-        setCurrentDay(dayData[parseInt(e.currentTarget.lastElementChild?.id as string)]);
+        setDay(dayData[parseInt(e.currentTarget.lastElementChild?.id as string)]);
     }
     const reDirectToday = ()=>{
-        setCurrentDay(dayData[1000]);
+        setDay(dayData[1000])
         ref.current!.scrollLeft = ref.current!.scrollWidth/2 - ref.current!.clientWidth/2;
     }
     React.useEffect(()=>{
@@ -51,13 +59,22 @@ const Header:React.FC = ()=>{
         ref.current!.addEventListener('mouseup',function(e){
             let distance:number = e.clientX - ref.current!.offsetLeft - origin;
             ref.current!.scrollLeft -= distance;
-        })
+        });
+        ref.current!.addEventListener('touchstart',function(e){
+            origin= e.touches[0]!.clientX - ref.current!.offsetLeft;
+        }) 
+        ref.current!.addEventListener('touchend',function(e){
+            let distance:number = e.changedTouches[0]!.clientX  - ref.current!.offsetLeft - origin;
+            ref.current!.scrollLeft -= distance;
+        });
+
     },[])
     return(
         <div className = {styles.header}>
                     <div className={styles.title}>
-                        <div>{currentDay[0] +"."+currentDay[1]}</div>
-                        <div className={styles.todayButton} onClick = {()=>reDirectToday()}>今</div>    
+                        <Login/>
+                        <div className = {styles.Title} >{ day[0] ==="" ? "":day[0] +"."+day[1]}</div>
+                        <div className = {styles.todayButton} onClick = {()=>reDirectToday()}>今</div>    
                     </div>
                     <ul ref = {ref}>  
                         {dayData.map((e,i)=>{
@@ -68,7 +85,7 @@ const Header:React.FC = ()=>{
                                                 className = {  cn( 
                                                                     styles.dateCircle,
                                                                     {
-                                                                        [styles.selected]:currentDay === e
+                                                                        [styles.selected]:day === e
                                                                     }
                                                                 )
                                                             }
@@ -81,6 +98,72 @@ const Header:React.FC = ()=>{
         </div>
     )
 }
+
+const Login:React.FC = ()=>{
+    //@ts-ignore
+    const {data,user,SetUser} = React.useContext(context);
+    const [vis,setVis] = React.useState<boolean>(false);
+    const headRef = React.useRef<HTMLDivElement>(null);
+    return(
+        <div>
+            <div    className  = {
+                                cn( 
+                                    styles.login,
+                                    {
+                                        [styles.loginIn]:user !==''
+                                    }
+                                )
+                    }
+                    onClick = {()=>{setVis(true)}}
+            >
+            </div>
+            <MenuModel visible={vis}>
+                    <div 
+                        ref = {headRef}
+                        className  = {styles.loginHeader}
+                    >
+                    </div>
+                    <input type="text" placeholder = 'username' onChange = {(e)=>{
+                                                                                if(data[e.currentTarget.value] !== undefined){
+                                                                                    let urll:string = data[e.currentTarget.value]['head'];
+                                                                                    headRef.current!.style.setProperty('--img',urll);
+                                                                                }
+
+                                                                            }}/>
+                    <input type="password" placeholder = 'password'/>
+                    <div className = {styles.loginButton}>Login</div>
+            </MenuModel>
+        </div>
+       
+    )
+}
+// `${data[tempUser] === undefined ? '':data[tempUser]['head']}`
+type modelType = {
+    visible?:boolean,
+}
+export const MenuModel:React.FC<modelType> = ({visible = false,children})=>{
+    if(!document.getElementById('menu')){
+        return null;
+    }
+    return ReactDOM.createPortal(
+        <div    className = {
+                                cn(
+                                    styles.menuModel,
+                                    {
+                                        [styles.modelVis]:visible
+                                    }
+                                    
+                                )
+                }>
+            <div className = {styles.content}>
+                {children}                
+            </div>
+        </div> 
+        
+    ,document.getElementById('menu') as Element)
+
+}
+
 
 
 
