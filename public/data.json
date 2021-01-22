@@ -1,7 +1,11 @@
 {
     "Shanghaihan":{
-        "password":123456,
+        "password":"123456",
         "head":"../../head0.jpg"
+    },
+    "Sunling":{
+        "password":"123456",
+        "head":"../../head1.jpg"
     }
 
 }

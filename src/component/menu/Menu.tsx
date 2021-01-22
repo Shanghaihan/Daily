@@ -101,37 +101,61 @@ const Header:React.FC = ()=>{
 
 const Login:React.FC = ()=>{
     //@ts-ignore
-    const {data,user,SetUser} = React.useContext(context);
+    const {data,setUser,user} = React.useContext(context);
     const [vis,setVis] = React.useState<boolean>(false);
+    const [username,setUsername] = React.useState<string>('');
+    const [password,setPassword] = React.useState<string>('');
     const headRef = React.useRef<HTMLDivElement>(null);
+    const HeadRef = React.useRef<HTMLDivElement>(null);
+    React.useEffect(()=>{
+        const headerVis = (ref:React.RefObject<HTMLDivElement>,obj:string):void =>{
+            if(data[obj] !== undefined){
+                let urll:string = data[obj]['head'];
+                ref.current!.style.background = 'url('+urll+') no-repeat';
+                ref.current!.style.backgroundSize = '100% auto'
+            }else{
+                if(ref.current){
+                    (ref.current!.style as CSSStyleDeclaration).background = '';
+                }
+            }
+        }
+        headerVis(HeadRef,user);
+        headerVis(headRef,username);
+    },[username,user,data])
     return(
         <div>
-            <div    className  = {
-                                cn( 
-                                    styles.login,
-                                    {
-                                        [styles.loginIn]:user !==''
-                                    }
-                                )
-                    }
+            <div    
+                    ref = {HeadRef}
+                    className  = {styles.login}
                     onClick = {()=>{setVis(true)}}
             >
             </div>
-            <MenuModel visible={vis}>
+            <MenuModel visible={vis} >
                     <div 
                         ref = {headRef}
                         className  = {styles.loginHeader}
                     >
+                    <div className = {styles.closeButton} onClick = {()=>{setVis(false)}}></div>
                     </div>
                     <input type="text" placeholder = 'username' onChange = {(e)=>{
-                                                                                if(data[e.currentTarget.value] !== undefined){
-                                                                                    let urll:string = data[e.currentTarget.value]['head'];
-                                                                                    headRef.current!.style.setProperty('--img',urll);
-                                                                                }
-
-                                                                            }}/>
-                    <input type="password" placeholder = 'password'/>
-                    <div className = {styles.loginButton}>Login</div>
+                                                                                setUsername(e.currentTarget.value);
+                                                                            }}
+                            value = {username}                                                
+                                                                            />
+                    <input type="password" placeholder = 'password' value = {password} onChange = {(e) =>{setPassword(e.currentTarget.value);}}/>
+                    <div className = {styles.loginButton} onClick = {()=>{
+                                                                        if(data[username] && data[username]['password'] === password){
+                                                                            window.sessionStorage.setItem('user',username);
+                                                                            setUser(username);
+                                                                            setVis(false);
+                                                                            setUsername('');
+                                                                            setPassword('');
+                                                                            var FileSaver = require('file-saver');
+                                                                            var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
+                                                                            saveAs(blob, "hello world.txt");
+                                                                        }
+                                                                    }}
+                    >Login</div>
             </MenuModel>
         </div>
        

@@ -23,9 +23,10 @@ const useData = ()=>{
 export const context = React.createContext({})
 function App() {
     const [data,pending] = useData();
-    console.log(data);
     const [day,setDay] = React.useState<string[]>(["","","",""]);
-    const [user,setUser] = React.useState<string>('');
+    const [user,setUser] = React.useState<string>(window.sessionStorage.getItem('user') as string);
+    React.useEffect(()=>{
+    },[])
     return (
         <div className="App">
             <context.Provider value={{

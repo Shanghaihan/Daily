@@ -33,7 +33,9 @@ $menu-color:cadetblue ;
             height: 40px;
             border-radius: 100%;  
             background-color: white;
+            border: 1px solid white;
             cursor: pointer;
+            transition: .3s;
             &.loginIn{
                 background-color: yellow;
             }
@@ -118,6 +120,7 @@ $menu-color:cadetblue ;
     }
 
 }
+
 .menuModel{
     position: absolute;
     display: flex;
@@ -140,35 +143,69 @@ $menu-color:cadetblue ;
         top:200px;
         margin: 0 auto;
         border-radius: 2%;
-        background-color: white;
+        background-color: $menu-color;
         width:250px;
         min-height:150px;
         padding: 10px;
-        .loginHeader{
-            --img:'';
-            width:40px;
-            height:40px;
-            background-color:white;
-            margin-bottom:10px;
-            border:1px solid grey;
-            border-radius:100%;
-            // background: url(var(--img)) no-repeat;
-            background-size: 100% auto;
-            cursor:pointer;
-        }
-        .loginButton{
-            width:150px;
-            height:25px;
-            border-radius:5%;
-            background-color:$menu-color;
-            cursor:pointer;
-            color:white;
-        }
-
     }
-
-
 }
+.loginHeader{
+    --img:'';
+    width:40px;
+    height:40px;
+    background-color:white;
+    margin-bottom:10px;
+    border:1px solid white;
+    border-radius:100%;
+    cursor:pointer;
+    transition: .3s;
+}
+.loginButton{
+    width:150px;
+    height:25px;
+    border-radius:5%;
+    background-color:rgb(167, 162, 162,0.8);
+    cursor:pointer;
+    color:white;
+    transition: .3s;
+    &:hover{
+        background-color: rgb(167, 162, 162,1);
+    }
+}
+.closeButton{
+    width: 20px;
+    height: 20px;
+    // background-color: white;
+	margin: auto;
+    position: absolute;
+    right: 10px;
+    transform-origin: center;
+    &::before,&::after{
+        content: '';
+        position: absolute;  /*方便进行定位*/
+        height: 20px;
+        width: 1.5px;
+        // top: 2px;
+        // right: 9px;  /*设置top和right使图像在20*20框中居中*/
+        background: white;
+        transform: rotate(45deg);
+    }
+    &::after{
+        transform: rotate(-45deg);
+    }
+    &:hover{
+        animation: identifier 1s;
+    }
+    @keyframes identifier {
+        0%{
+            transform: rotateZ(0deg)
+        }
+        100%{
+            transform: rotateZ(360deg);
+        }
+    }
+}
+
 input{
     box-sizing: border-box;
     width: 150px;
@@ -176,8 +213,12 @@ input{
     margin: 0px 10px 10px 10px;
     color: grey;
     transition: .3s;
-}
-input:focus{
-    outline: 0;
-    border: 1px solid $menu-color;
+    &:focus{
+        outline: 0;
+        border: 1px solid white;
+    }
+    &::-webkit-input-placeholder{
+        // color: red;
+    }
+
 }
