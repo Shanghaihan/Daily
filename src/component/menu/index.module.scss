@@ -192,6 +192,7 @@ $menu-color:cadetblue ;
         position: absolute;
         display: flex;
         flex-direction: column;
+        align-items: center;
         align-self: center;
         box-sizing: border-box;
         top:100%;
@@ -221,6 +222,55 @@ $menu-color:cadetblue ;
             }
             to {
               transform: translateY(0%)
+            }
+        }
+        .addModelTitle{
+            font-size: 25px;
+            font-weight: bolder;
+            color: rgb(94, 94, 94);
+            margin: 5px 75% 10px 0;
+        }
+        .addModelItem{
+            display: flex;
+            align-items: center; 
+            margin: 10px;
+            width: 340px;
+            height: 60px;
+            background-color:rgb(228, 225, 228);
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+            transition: .3s;
+            &:hover{
+                box-shadow: 0 0 3px black;
+            }
+            .checkIcon{
+                position: relative;
+                margin: 10px;
+                width: 30px;
+                height: 30px;
+                background-color: steelblue;
+                &::before{
+                    content: "";
+                    position: absolute;
+                    left: 9px;
+                    top:2px;
+                    height: 16px;
+                    width: 8px;
+                    border: 4px solid white;
+                    border-left: transparent;
+                    border-top: transparent;
+                    transform: rotate(45deg);
+                }
+            }
+            .timeIcon{
+                position: relative;
+                box-sizing: border-box;
+                margin: 10px;
+                width: 30px;
+                height: 30px;
+                border: 4px solid $menu-color;
+                border-radius: 100%;
             }
         }
     }

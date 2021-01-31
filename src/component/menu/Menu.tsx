@@ -219,7 +219,20 @@ const Content:React.FC = ()=>{
             <div className = {styles.footer}>
                 <div className = {styles.addButton} onClick = {()=>{setVis(vis=>!vis)}}></div>
             </div>
-            <AddModel visible = {vis}></AddModel>
+            <AddModel visible = {vis}>
+                <div className = {styles.addModelTitle}>Create</div>
+                <div className = {styles.addModelItem}>
+                    <div  className ={styles.timeIcon}></div>
+                    <div style ={{fontSize:'20px',marginLeft:'5px'}}>Measure activity time</div>
+                    <div style ={{ marginLeft:'auto',marginRight:'20px',width:'15px',height:'15px',transform:'rotate(45deg)',border:'4px solid black',borderLeft:'transparent',borderBottom:'transparent'}}></div>
+                </div>
+                <div className = {styles.addModelItem}>
+                    <div  className ={styles.checkIcon}></div>
+                    <div style ={{fontSize:'20px',marginLeft:'5px'}}>Check activities</div>
+                    <div style ={{ marginLeft:'auto',marginRight:'20px',width:'15px',height:'15px',transform:'rotate(45deg)',border:'4px solid black',borderLeft:'transparent',borderBottom:'transparent'}}></div>
+                </div>
+
+            </AddModel>
         </div>
     )
 }
